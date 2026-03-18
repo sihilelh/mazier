@@ -65,6 +65,16 @@ function drawMaze(
   ctx.moveTo(start.x, start.y);
 
   for (let i = 1; i < order.length; i++) {
+    if (order[i] === "DE") {
+      ctx.stroke();
+      if (i + 1 < order.length) {
+        const next = getCellCenter(order[i + 1], grid, cellWidth, cellHeight);
+        ctx.beginPath();
+        ctx.moveTo(next.x, next.y);
+      }
+      continue;
+    }
+
     const point = getCellCenter(order[i], grid, cellWidth, cellHeight);
     ctx.lineTo(point.x, point.y);
   }
@@ -93,7 +103,7 @@ export function Maze() {
 
   useEffect(() => {
     handleGenerate();
-  }, []);
+  }, [gridW, gridH]);
 
   useEffect(() => {
     if (!ctx) return;
@@ -101,16 +111,6 @@ export function Maze() {
     drawGrid(ctx, grid, cellWidth, cellHeight, CANVAS_WIDTH, CANVAS_HEIGHT);
     drawMaze(ctx, order, grid, cellWidth, cellHeight);
   }, [ctx, order, cellWidth, cellHeight]);
-
-  function setGrid(o: "w" | "h", value: number) {
-    if (o === "w") {
-      setGridW(value);
-    }
-    if (o === "h") {
-      setGridH(value);
-    }
-    handleGenerate();
-  }
 
   return (
     <div>
@@ -120,14 +120,14 @@ export function Maze() {
           type="number"
           min={2}
           value={gridW}
-          onChange={(e) => setGrid("w", Number(e.target.value))}
+          onChange={(e) => setGridW(Number(e.target.value))}
         />
         <Input
           label="Height"
           type="number"
           min={2}
           value={gridH}
-          onChange={(e) => setGrid("h", Number(e.target.value))}
+          onChange={(e) => setGridH(Number(e.target.value))}
         />
         <Button onClick={handleGenerate}>Regenerate</Button>
       </div>

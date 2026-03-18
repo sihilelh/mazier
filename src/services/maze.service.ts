@@ -50,6 +50,8 @@ function randomDFS(graph: Graph, startCell: string): string[] {
       if (visited.has(n)) continue;
       dfs(n);
     }
+    // Dead end
+    order.push("DE");
   }
 
   dfs(startCell);
