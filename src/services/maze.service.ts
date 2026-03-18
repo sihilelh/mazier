@@ -1,6 +1,6 @@
 import { Graph } from "../utils/graph.utils";
 
-interface GenerateMazeOptions {
+export interface GenerateMazeOptions {
   hCells: number;
   wCells: number;
   startCell: number;
