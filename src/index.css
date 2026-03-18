@@ -1,1 +1,29 @@
 @import "tailwindcss";
+
+@theme {
+  --color-paper: #f5f0e8;
+  --color-paper-light: #fdfaf5;
+  --color-ink: #2b2b2b;
+  --color-ink-dark: #1a1a1a;
+  --color-accent: #c0392b;
+  --color-muted: #888888;
+  --color-shadow: #c8c0b0;
+  --color-grid: #ddd;
+
+  --font-arcade: "Press Start 2P", monospace;
+  --font-mono: "Share Tech Mono", "Courier New", monospace;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-paper);
+  font-family: var(--font-mono);
+  color: var(--color-ink);
+  min-height: 100dvh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

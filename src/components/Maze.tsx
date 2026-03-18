@@ -3,6 +3,7 @@ import { useCanvas } from "../hooks/useCanvas";
 import { useMaze } from "../hooks/useMaze";
 import { Input } from "./Input";
 import { Button } from "./Button";
+import { Wand2, LayoutGrid, Download } from "lucide-react";
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
@@ -112,26 +113,71 @@ export function Maze() {
     drawMaze(ctx, order, grid, cellWidth, cellHeight);
   }, [ctx, order, cellWidth, cellHeight]);
 
+  function handleDownload() {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const offscreen = document.createElement("canvas");
+    offscreen.width = canvas.width;
+    offscreen.height = canvas.height;
+    const offCtx = offscreen.getContext("2d")!;
+    offCtx.fillStyle = "#ffffff";
+    offCtx.fillRect(0, 0, offscreen.width, offscreen.height);
+    offCtx.drawImage(canvas, 0, 0);
+    const link = document.createElement("a");
+    link.download = "mazier.png";
+    link.href = offscreen.toDataURL("image/png");
+    link.click();
+  }
+
   return (
-    <div>
-      <div>
-        <Input
-          label="Width"
-          type="number"
-          min={2}
-          value={gridW}
-          onChange={(e) => setGridW(Number(e.target.value))}
-        />
-        <Input
-          label="Height"
-          type="number"
-          min={2}
-          value={gridH}
-          onChange={(e) => setGridH(Number(e.target.value))}
-        />
-        <Button onClick={handleGenerate}>Regenerate</Button>
+    <div className="flex flex-col items-center gap-4 sm:gap-5 w-full max-w-[632px]">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">
+        <div className="flex items-center gap-3 justify-center">
+          <Input
+            label="W"
+            icon={<LayoutGrid size={16} />}
+            type="number"
+            min={2}
+            value={gridW}
+            onChange={(e) => setGridW(Number(e.target.value))}
+          />
+          <Input
+            label="H"
+            type="number"
+            min={2}
+            value={gridH}
+            onChange={(e) => setGridH(Number(e.target.value))}
+          />
+        </div>
+        <Button
+          onClick={handleGenerate}
+          icon={<Wand2 size={16} />}
+          className="w-full sm:w-auto sm:ml-auto"
+        >
+          Generate
+        </Button>
       </div>
-      <canvas ref={canvasRef}></canvas>
+
+      <div className="relative w-full max-w-[600px] mx-auto">
+        <canvas
+          ref={canvasRef}
+          className="block w-full h-auto border-2 border-ink bg-white shadow-[3px_3px_0px_var(--color-shadow)]"
+        />
+        <button
+          onClick={handleDownload}
+          title="Download as PNG"
+          className="absolute bottom-2 right-2
+            w-8 h-8 flex items-center justify-center
+            border-2 border-ink rounded-sm cursor-pointer
+            bg-[rgba(245,240,232,0.9)] text-ink
+            transition-colors duration-150
+            hover:bg-ink hover:text-paper
+            active:bg-accent active:border-accent active:text-paper
+            focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          <Download size={16} />
+        </button>
+      </div>
     </div>
   );
 }
