@@ -99,7 +99,7 @@ export function Maze() {
   const cellHeight = CANVAS_HEIGHT / gridH;
 
   function handleGenerate() {
-    generate({ wCells: gridW, hCells: gridH, startCell: 0 });
+    generate({ wCells: gridW, hCells: gridH });
   }
 
   useEffect(() => {

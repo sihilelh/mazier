@@ -39,7 +39,7 @@ function randomDFS(graph: Graph, startCell: string): string[] {
 
   function dfs(startVertex: string) {
     visited.add(startVertex);
-    order.push(startVertex);
+    pushToOrder(startVertex);
     const neighborsInRandomOrder = Array.from(
       graph.getNeighbors(startVertex),
     ).sort(
@@ -50,8 +50,14 @@ function randomDFS(graph: Graph, startCell: string): string[] {
       if (visited.has(n)) continue;
       dfs(n);
     }
-    // Dead end
-    order.push("DE");
+  }
+
+  function pushToOrder(vertex: string) {
+    // Push a Dead end if the last vertex is not a neighbor of this vertex
+    const lastVertex = order.length > 0 ? order[order.length - 1] : null;
+    if (lastVertex && !graph.getNeighbors(lastVertex!).has(vertex))
+      order.push("DE");
+    order.push(vertex);
   }
 
   dfs(startCell);
